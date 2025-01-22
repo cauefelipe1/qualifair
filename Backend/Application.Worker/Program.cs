@@ -1,5 +1,6 @@
 using Hangfire;
 using Hangfire.MemoryStorage;
+using Infrastructure.OpenAQClient;
 using Jobs.Location;
 
 namespace Application.Worker;
@@ -14,6 +15,13 @@ public class Program
         builder.Services.AddHangfireServer();
         
         builder.Services.AddTransient<UpdateLocation>();
+        builder.Services.AddSingleton<IOpenAQClient, OpenAQClientRest>();
+
+        builder.Services
+            .AddHttpClient<IOpenAQClient, OpenAQClientRest>();//(client =>
+            // {
+            //     client.BaseAddress = new Uri(receitaWsConfig.ApiUrl);
+            // }).AddPolicyHandler(retryPolicy);
         
         builder.Services.AddHostedService<Worker>();
 
